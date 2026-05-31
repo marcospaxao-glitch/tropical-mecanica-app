@@ -18,7 +18,7 @@ jobs:
       uses: actions/setup-node@v4
       with:
         node-version: '20'
-        cache: 'npm'
+        # Sem cache para evitar erro de lock file
 
     - name: Setup Java
       uses: actions/setup-java@v4
@@ -43,14 +43,14 @@ jobs:
         cd android
         ./gradlew assembleDebug
 
-    - name: Upload APK
+    - name: Upload Debug APK
       uses: actions/upload-artifact@v4
       with:
         name: tropical-mecanica-apk
         path: android/app/build/outputs/apk/debug/app-debug.apk
         retention-days: 30
 
-    - name: Build Release APK (unsigned)
+    - name: Build Release APK
       run: |
         cd android
         ./gradlew assembleRelease
