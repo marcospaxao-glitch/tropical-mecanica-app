@@ -1,7 +1,7 @@
 {
   "name": "tropical-mecanica-app",
   "version": "1.0.0",
-  "description": "Calculadora de Preços - Tropical Mecânica",
+  "description": "Calculadora de Precos - Tropical Mecanica",
   "scripts": {
     "build": "echo 'No build step needed for static HTML'",
     "sync": "npx cap sync android",
