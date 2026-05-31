@@ -501,11 +501,7 @@
                 <span class="total-title">Valor Parceiro (-30%)</span>
                 <span class="total-value partner30" id="totalPartner30">R$ 0,00</span>
             </div>
-            <div class="total-row">
-                <span class="total-title">Economia (-30%)</span>
-                <span class="total-value savings" id="totalSavings">R$ 0,00</span>
-            </div>
-            <div class="savings-info" id="savingsInfo"></div>
+            <!-- Economia removida -->
             <button class="clear-btn" onclick="clearAll()">🗑️ Limpar Seleção</button>
         </div>
     </div>
@@ -632,12 +628,11 @@
 
             const totalPartner20 = Math.round(totalNormal * (1 - DISCOUNT_20));
             const totalPartner30 = Math.round(totalNormal * (1 - DISCOUNT_30));
-            const savings = totalNormal - totalPartner30;
-
+            
             document.getElementById('totalNormal').textContent = formatMoney(totalNormal);
             document.getElementById('totalPartner20').textContent = formatMoney(totalPartner20);
             document.getElementById('totalPartner30').textContent = formatMoney(totalPartner30);
-            document.getElementById('totalSavings').textContent = formatMoney(savings);
+            // Economia removida
             document.getElementById('selectedCount').textContent = count + (count === 1 ? ' item selecionado' : ' itens selecionados');
         }
 
