@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>🚗 Tropical Mecânica</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, #0d1b2a 0%, #1b263b 50%, #415a77 100%);
+            min-height: 100vh;
+            color: #e0e1dd;
+            padding-bottom: 160px;
+        }
+
+        .header {
+            background: rgba(0,0,0,0.35);
+            backdrop-filter: blur(12px);
+            padding: 20px 16px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .header h1 {
+            font-size: 1.25rem;
+            text-align: center;
+            margin-bottom: 12px;
+            background: linear-gradient(90deg, #00b4d8, #90e0ef);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 700;
+        }
+
+        .search-box {
+            position: relative;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 12px 16px 12px 44px;
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.12);
+            background: rgba(255,255,255,0.06);
+            color: #e0e1dd;
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.3s;
+        }
+
+        .search-box input::placeholder {
+            color: rgba(255,255,255,0.35);
+        }
+
+        .search-box input:focus {
+            border-color: #00b4d8;
+            background: rgba(255,255,255,0.1);
+            box-shadow: 0 0 20px rgba(0,180,216,0.12);
+        }
+
+        .search-box svg {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 20px;
+            height: 20px;
+            fill: rgba(255,255,255,0.35);
+        }
+
+        .container {
+            padding: 16px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #00b4d8;
+            margin: 24px 0 12px;
+            padding-left: 8px;
+            border-left: 3px solid #00b4d8;
+            font-weight: 600;
+        }
+
+        .section-title:first-child {
+            margin-top: 8px;
+        }
+
+        .item-card {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 14px;
+            padding: 14px 16px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .item-card::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: #00b4d8;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .item-card:hover {
+            background: rgba(255,255,255,0.07);
+            transform: translateX(3px);
+        }
+
+        .item-card.selected {
+            background: rgba(0,180,216,0.08);
+            border-color: rgba(0,180,216,0.25);
+        }
+
+        .item-card.selected::before {
+            opacity: 1;
+        }
+
+        .item-card.hidden {
+            display: none;
+        }
+
+        .item-card.disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+
+        .checkbox {
+            width: 24px;
+            height: 24px;
+            border-radius: 8px;
+            border: 2px solid rgba(255,255,255,0.25);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: all 0.2s;
+        }
+
+        .item-card.selected .checkbox {
+            background: #00b4d8;
+            border-color: #00b4d8;
+        }
+
+        .checkbox svg {
+            width: 14px;
+            height: 14px;
+            fill: #0d1b2a;
+            opacity: 0;
+            transform: scale(0.5);
+            transition: all 0.2s;
+        }
+
+        .item-card.selected .checkbox svg {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .item-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .item-name {
+            font-size: 0.95rem;
+            font-weight: 500;
+            margin-bottom: 3px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            color: #e0e1dd;
+        }
+
+        .item-card.selected .item-name {
+            color: #90e0ef;
+        }
+
+        .item-desc {
+            font-size: 0.78rem;
+            color: rgba(255,255,255,0.4);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .item-price {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #90e0ef;
+            flex-shrink: 0;
+            white-space: nowrap;
+        }
+
+        .item-card.selected .item-price {
+            color: #00b4d8;
+        }
+
+        .combo-badge {
+            display: inline-block;
+            font-size: 0.7rem;
+            padding: 2px 8px;
+            border-radius: 6px;
+            margin-left: 6px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .combo-badge.basico { background: rgba(76, 175, 80, 0.2); color: #4caf50; }
+        .combo-badge.intermediario { background: rgba(255, 193, 7, 0.2); color: #ffc107; }
+        .combo-badge.performance { background: rgba(255, 152, 0, 0.2); color: #ff9800; }
+        .combo-badge.avancado { background: rgba(33, 150, 243, 0.2); color: #2196f3; }
+        .combo-badge.blindado { background: rgba(96, 125, 139, 0.2); color: #607d8b; }
+        .combo-badge.completo { background: rgba(244, 67, 54, 0.2); color: #f44336; }
+
+        .combo-includes {
+            font-size: 0.75rem;
+            color: rgba(255,255,255,0.35);
+            margin-top: 2px;
+            font-style: italic;
+        }
+
+        .total-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(13, 27, 42, 0.97);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding: 16px 20px 24px;
+            z-index: 200;
+            transform: translateY(0);
+            transition: transform 0.3s;
+        }
+
+        .total-bar.collapsed {
+            transform: translateY(calc(100% - 52px));
+        }
+
+        .total-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .total-label {
+            font-size: 0.85rem;
+            color: rgba(255,255,255,0.5);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .toggle-btn {
+            background: none;
+            border: none;
+            color: rgba(255,255,255,0.5);
+            cursor: pointer;
+            padding: 4px;
+        }
+
+        .toggle-btn svg {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
+            transition: transform 0.3s;
+        }
+
+        .total-bar.collapsed .toggle-btn svg {
+            transform: rotate(180deg);
+        }
+
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .total-row:last-child {
+            border-bottom: none;
+            padding-top: 10px;
+        }
+
+        .total-title {
+            font-size: 0.9rem;
+            color: rgba(255,255,255,0.6);
+        }
+
+        .total-value {
+            font-size: 1.15rem;
+            font-weight: 700;
+        }
+
+        .total-value.normal {
+            color: #90e0ef;
+        }
+
+        .total-value.partner20 {
+            color: #c77dff;
+        }
+
+        .total-value.partner30 {
+            color: #ff8c42;
+        }
+
+        .total-value.savings {
+            color: #4ade80;
+            font-size: 1rem;
+        }
+
+        .savings-info {
+            font-size: 0.78rem;
+            color: #4ade80;
+            text-align: right;
+            margin-top: 2px;
+        }
+
+        .selected-count {
+            font-size: 0.75rem;
+            color: rgba(255,255,255,0.4);
+            margin-top: 2px;
+        }
+
+        .clear-btn {
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.15);
+            color: rgba(255,255,255,0.7);
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            margin-top: 12px;
+            width: 100%;
+            transition: all 0.2s;
+            font-weight: 500;
+        }
+
+        .clear-btn:hover {
+            background: rgba(255,255,255,0.15);
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 60px 20px;
+            color: rgba(255,255,255,0.4);
+            font-size: 1rem;
+        }
+
+        .no-results svg {
+            width: 48px;
+            height: 48px;
+            fill: rgba(255,255,255,0.2);
+            margin-bottom: 16px;
+        }
+
+        .gratis-tag {
+            font-size: 0.75rem;
+            color: #4caf50;
+            font-weight: 600;
+        }
+
+        .partner-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 12px;
+            padding: 8px 12px;
+            background: rgba(199, 125, 255, 0.1);
+            border: 1px solid rgba(199, 125, 255, 0.2);
+            border-radius: 10px;
+        }
+
+        .partner-badge span {
+            font-size: 0.9rem;
+            color: #c77dff;
+            font-weight: 600;
+        }
+
+        .partner-discount-badge {
+            font-size: 0.75rem;
+            color: #c77dff;
+            background: rgba(199, 125, 255, 0.15);
+            padding: 2px 8px;
+            border-radius: 6px;
+            font-weight: 600;
+            margin-left: auto;
+        }
+
+        .discount-badges {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .discount-badge {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .discount-badge.d20 {
+            background: rgba(199, 125, 255, 0.12);
+            border: 1px solid rgba(199, 125, 255, 0.25);
+            color: #c77dff;
+        }
+
+        .discount-badge.d30 {
+            background: rgba(255, 140, 66, 0.12);
+            border: 1px solid rgba(255, 140, 66, 0.25);
+            color: #ff8c42;
+        }
+
+        @media (min-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+            .item-card {
+                padding: 16px 20px;
+            }
+            .item-name {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🚗 Tropical Mecânica - Tabela de Preços</h1>
+        <div class="search-box">
+            <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+            <input type="text" id="searchInput" placeholder="Pesquisar serviço..." autocomplete="off">
+        </div>
+    </div>
+
+    <div class="container" id="itemsContainer"></div>
+
+    <div class="no-results" id="noResults" style="display:none;">
+        <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+        <div>Nenhum serviço encontrado</div>
+    </div>
+
+    <div class="total-bar" id="totalBar">
+        <div class="total-header">
+            <div>
+                <div class="total-label">Total Selecionado</div>
+                <div class="selected-count" id="selectedCount">0 itens selecionados</div>
+            </div>
+            <button class="toggle-btn" id="toggleBtn" onclick="toggleBar()">
+                <svg viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg>
+            </button>
+        </div>
+        <div id="totalsContent">
+            <div class="discount-badges">
+                <div class="discount-badge d20">
+                    <span>🤝</span>
+                    <span>Parceiro -20%</span>
+                </div>
+                <div class="discount-badge d30">
+                    <span>⭐</span>
+                    <span>Parceiro -30%</span>
+                </div>
+            </div>
+            <div class="total-row">
+                <span class="total-title">Valor Normal</span>
+                <span class="total-value normal" id="totalNormal">R$ 0,00</span>
+            </div>
+            <div class="total-row">
+                <span class="total-title">Valor Parceiro (-20%)</span>
+                <span class="total-value partner20" id="totalPartner20">R$ 0,00</span>
+            </div>
+            <div class="total-row">
+                <span class="total-title">Valor Parceiro (-30%)</span>
+                <span class="total-value partner30" id="totalPartner30">R$ 0,00</span>
+            </div>
+            <div class="total-row">
+            </div>
+            <button class="clear-btn" onclick="clearAll()">🗑️ Limpar Seleção</button>
+        </div>
+    </div>
+
+    <script>
+        const items = [
+            { name: "BÁSICO", price: 80000, section: "Combos Promocionais", desc: "Suspensão + Freios", combo: "basico", icon: "🟢" },
+            { name: "INTERMEDIÁRIO", price: 150000, section: "Combos Promocionais", desc: "Suspensão + Freios + Turbo", combo: "intermediario", icon: "🟡" },
+            { name: "PERFORMANCE", price: 200000, section: "Combos Promocionais", desc: "Suspensão + Freios + Turbo + Transmissão", combo: "performance", icon: "🟠" },
+            { name: "AVANÇADO (FullTuning)", price: 280000, section: "Combos Promocionais", desc: "Suspensão + Freios + Turbo + Transmissão + Motor", combo: "avancado", icon: "🔵" },
+            { name: "COMPLETO (TUDO)", price: 800000, section: "Combos Promocionais", desc: "Todos os serviços da tabela sem blindagem", combo: "completo", icon: "⚫" },
+            
+            { name: "Kit de Reparo (Sem Desconto)", price: 10000, section: "Preços Individuais", desc: "", icon: "🔧" },
+            { name: "Pneu (Sem Desconto)", price: 5000, section: "Preços Individuais", desc: "Proíbida a venda", icon: "🛠" },
+            { name: "Reparo (Na Mec) (Sem Desconto)", price: 5000, section: "Preços Individuais", desc: "Dentro da mecânica", icon: "🔧" },
+            { name: "Reparo (Fora da Mec) (Sem Desconto)", price: 10000, section: "Preços Individuais", desc: "Fora da mecânica", icon: "🔧" },
+            { name: "Reparo (No Norte) (Sem Desconto)", price: 15000, section: "Preços Individuais", desc: "Área norte", icon: "🔧" },
+			
+            { name: "Suspensão", price: 50000, section: "Preços Individuais", desc: "", icon: "⬇️" },
+            { name: "Freios", price: 30000, section: "Preços Individuais", desc: "", icon: "🛑" },
+            { name: "Turbo", price: 50000, section: "Preços Individuais", desc: "", icon: "💨" },
+            { name: "Transmissão", price: 75000, section: "Preços Individuais", desc: "", icon: "⚙️" },
+            { name: "Motor", price: 75000, section: "Preços Individuais", desc: "", icon: "🔥" },
+			
+			{ name: "Extras", price: 80000, section: "Avulsos", desc: "", icon: "•" },
+			{ name: "Portas", price: 15000, section: "Avulsos", desc: "", icon: "•" },
+			{ name: "Pintura", price: 15000, section: "Avulsos", desc: "Cor Farol, Rodas, ", icon: "•" },
+			{ name: "Xenon/Cor", price: 20000, section: "Avulsos", desc: "Farol e Cor", icon: "•" },
+            { name: "Som", price: 15000, section: "Avulsos", desc: "Alto-Falantes", icon: "•" },
+            { name: "Buzina", price: 10000, section: "Avulsos", desc: "", icon: "•" },
+            { name: "Capô", price: 15000, section: "Avulsos", desc: "", icon: "•" },
+            { name: "Escapamento", price: 15000, section: "Avulsos", desc: "", icon: "•" },
+            { name: "Grade", price: 15000, section: "Avulsos", desc: "", icon: "•" },
+            { name: "Neon+Cor", price: 30000, section: "Avulsos", desc: "", icon: "•" },
+            { name: "Para-Choque/Para-Lama/Saia", price: 60000, section: "Avulsos", desc: "Tudo incluso/ Avulso é 25k", icon: "•" },
+			{ name: "Aerofólio", price: 15000, section: "Avulsos", desc: "", icon: "•" },
+			{ name: "Chassi", price: 15000, section: "Avulsos", desc: "", icon: "•" },
+			{ name: "Placa", price: 2000, section: "Avulsos", desc: "", icon: "•" },
+			{ name: "Vidro", price: 15000, section: "Avulsos", desc: "", icon: "•" },
+            
+            { name: "Roda", price: 20000, section: "Avulsos", desc: "Pneu", icon: "•" },
+            { name: "Teto", price: 15000, section: "Avulsos", desc: "", icon: "•" },
+            { name: "Adesivos/Decalque", price: 15000, section: "Avulsos", desc: "", icon: "•" },
+			{ name: "Fumaça", price: 10000, section: "Avulsos", desc: "", icon: "•" },
+			{ name: "Banco", price: 15000, section: "Avulsos", desc: "", icon: "•" },
+			{ name: "Painel", price: 15000, section: "Avulsos", desc: "", icon: "•" },
+
+            { name: "Blindagem 20%", price: 1000000, section: "Blindagem", desc: "Avulsos", icon: "🛡" },
+			{ name: "Blindagem 40%", price: 1200000, section: "Blindagem", desc: "Avulsos", icon: "🛡" },
+			{ name: "Blindagem 60%", price: 1400000, section: "Blindagem", desc: "Avulsos", icon: "🛡" },
+			{ name: "Blindagem 80%", price: 1600000, section: "Blindagem", desc: "Avulsos", icon: "🛡" },
+			{ name: "Blindagem 100%", price: 1800000, section: "Blindagem", desc: "Avulsos", icon: "🛡" },
+            { name: "Blindagem Pneu", price: 500000, section: "Blindagem", desc: "Avulsos", icon: "🛡" },
+
+        ];
+
+        const selected = new Set();
+        const DISCOUNT_20 = 0.20;
+        const DISCOUNT_30 = 0.30;
+
+        function formatMoney(value) {
+            return 'R$ ' + value.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
+
+        function renderItems() {
+            const container = document.getElementById('itemsContainer');
+            let currentSection = '';
+            let html = '';
+
+            items.forEach((item, index) => {
+                if (item.section !== currentSection) {
+                    currentSection = item.section;
+                    html += `<div class="section-title">${item.section}</div>`;
+                }
+
+                const isDisabled = item.disabled || false;
+                const isGratis = item.price === 0 && !isDisabled;
+                const comboBadge = item.combo ? `<span class="combo-badge ${item.combo}">${item.combo}</span>` : '';
+                const priceDisplay = isDisabled ? '<span style="color:#f44336;font-size:0.85rem;font-weight:600;">PROIBIDO</span>' : 
+                                     isGratis ? '<span class="gratis-tag">GRÁTIS</span>' : 
+                                     `<span class="item-price">${formatMoney(item.price)}</span>`;
+
+                html += `
+                    <div class="item-card ${isDisabled ? 'disabled' : ''}" 
+                         data-index="${index}" 
+                         data-name="${item.name.toLowerCase()}" 
+                         data-section="${item.section.toLowerCase()}"
+                         ${!isDisabled ? `onclick="toggleItem(${index})"` : ''}>
+                        <div class="checkbox">
+                            <svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+                        </div>
+                        <div class="item-info">
+                            <div class="item-name">${item.icon} ${item.name}${comboBadge}</div>
+                            ${item.desc ? `<div class="item-desc">${item.desc}</div>` : ''}
+                        </div>
+                        ${priceDisplay}
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+        }
+
+        function toggleItem(index) {
+            const card = document.querySelector(`[data-index="${index}"]`);
+            if (selected.has(index)) {
+                selected.delete(index);
+                card.classList.remove('selected');
+            } else {
+                selected.add(index);
+                card.classList.add('selected');
+            }
+            updateTotals();
+        }
+
+        function updateTotals() {
+            let totalNormal = 0;
+            let count = 0;
+
+            selected.forEach(index => {
+                totalNormal += items[index].price;
+                count++;
+            });
+
+            const totalPartner20 = Math.round(totalNormal * (1 - DISCOUNT_20));
+            const totalPartner30 = Math.round(totalNormal * (1 - DISCOUNT_30));
+            const savings = totalNormal - totalPartner30;
+
+            document.getElementById('totalNormal').textContent = formatMoney(totalNormal);
+            document.getElementById('totalPartner20').textContent = formatMoney(totalPartner20);
+            document.getElementById('totalPartner30').textContent = formatMoney(totalPartner30);
+            document.getElementById('totalSavings').textContent = formatMoney(savings);
+            document.getElementById('selectedCount').textContent = count + (count === 1 ? ' item selecionado' : ' itens selecionados');
+        }
+
+        function clearAll() {
+            selected.clear();
+            document.querySelectorAll('.item-card').forEach(card => card.classList.remove('selected'));
+            updateTotals();
+        }
+
+        function toggleBar() {
+            document.getElementById('totalBar').classList.toggle('collapsed');
+        }
+
+        document.getElementById('searchInput').addEventListener('input', function(e) {
+            const query = e.target.value.toLowerCase().trim();
+            const cards = document.querySelectorAll('.item-card');
+            const sections = document.querySelectorAll('.section-title');
+            let visibleCount = 0;
+
+            cards.forEach(card => {
+                const name = card.dataset.name;
+                const section = card.dataset.section;
+                if (name.includes(query) || section.includes(query)) {
+                    card.classList.remove('hidden');
+                    visibleCount++;
+                } else {
+                    card.classList.add('hidden');
+                }
+            });
+
+            sections.forEach(sec => {
+                const nextEl = sec.nextElementSibling;
+                let hasVisible = false;
+                let el = nextEl;
+                while (el && !el.classList.contains('section-title')) {
+                    if (!el.classList.contains('hidden')) {
+                        hasVisible = true;
+                        break;
+                    }
+                    el = el.nextElementSibling;
+                }
+                sec.style.display = hasVisible ? 'block' : 'none';
+            });
+
+            document.getElementById('noResults').style.display = visibleCount === 0 ? 'block' : 'none';
+        });
+
+        renderItems();
+    </script>
+</body>
+</html>
