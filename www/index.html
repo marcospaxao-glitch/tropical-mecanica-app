@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>🚗 Tropical Mecânica</title>
+    <title>🚗 Filadélfia Customs</title>
     <style>
         * {
             margin: 0;
@@ -454,7 +454,7 @@
 </head>
 <body>
     <div class="header">
-        <h1>🚗 Tropical Mecânica - Tabela de Preços</h1>
+        <h1>🚗 Filadélfia Customs - Tabela de Preços</h1>
         <div class="search-box">
             <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
             <input type="text" id="searchInput" placeholder="Pesquisar serviço..." autocomplete="off">
@@ -501,60 +501,69 @@
                 <span class="total-title">Valor Parceiro (-30%)</span>
                 <span class="total-value partner30" id="totalPartner30">R$ 0,00</span>
             </div>
-            <!-- Economia removida -->
+            <div class="total-row">
+            </div>
             <button class="clear-btn" onclick="clearAll()">🗑️ Limpar Seleção</button>
         </div>
     </div>
 
     <script>
         const items = [
-            { name: "BÁSICO", price: 80000, section: "Combos Promocionais", desc: "Suspensão + Freios", combo: "basico", icon: "🟢" },
-            { name: "INTERMEDIÁRIO", price: 150000, section: "Combos Promocionais", desc: "Suspensão + Freios + Turbo", combo: "intermediario", icon: "🟡" },
-            { name: "PERFORMANCE", price: 200000, section: "Combos Promocionais", desc: "Suspensão + Freios + Turbo + Transmissão", combo: "performance", icon: "🟠" },
-            { name: "AVANÇADO (FullTuning)", price: 280000, section: "Combos Promocionais", desc: "Suspensão + Freios + Turbo + Transmissão + Motor", combo: "avancado", icon: "🔵" },
-            { name: "COMPLETO (TUDO)", price: 800000, section: "Combos Promocionais", desc: "Todos os serviços da tabela sem blindagem", combo: "completo", icon: "⚫" },
+            { name: "BÁSICO", price: 200000, section: "Combos Promocionais", desc: "Suspensão + Freios", combo: "basico", icon: "🟢" },
+            { name: "INTERMEDIÁRIO", price: 300000, section: "Combos Promocionais", desc: "Suspensão + Freios + Turbo", combo: "intermediario", icon: "🟡" },
+            { name: "PERFORMANCE", price: 400000, section: "Combos Promocionais", desc: "Suspensão + Freios + Turbo + Transmissão", combo: "performance", icon: "🟠" },
+            { name: "AVANÇADO (FullTuning)", price: 550000, section: "Combos Promocionais", desc: "Suspensão + Freios + Turbo + Transmissão + Motor", combo: "avancado", icon: "🔵" },
+            { name: "COMPLETO (TUDO)", price: 1500000, section: "Combos Promocionais", desc: "Todos os serviços da tabela", combo: "completo", icon: "⚫" },
             
             { name: "Kit de Reparo (Sem Desconto)", price: 10000, section: "Preços Individuais", desc: "", icon: "🔧" },
             { name: "Pneu (Sem Desconto)", price: 5000, section: "Preços Individuais", desc: "Proíbida a venda", icon: "🛠" },
             { name: "Reparo (Na Mec) (Sem Desconto)", price: 5000, section: "Preços Individuais", desc: "Dentro da mecânica", icon: "🔧" },
             { name: "Reparo (Fora da Mec) (Sem Desconto)", price: 10000, section: "Preços Individuais", desc: "Fora da mecânica", icon: "🔧" },
             { name: "Reparo (No Norte) (Sem Desconto)", price: 15000, section: "Preços Individuais", desc: "Área norte", icon: "🔧" },
-			
-            { name: "Suspensão", price: 50000, section: "Preços Individuais", desc: "", icon: "⬇️" },
-            { name: "Freios", price: 30000, section: "Preços Individuais", desc: "", icon: "🛑" },
-            { name: "Turbo", price: 50000, section: "Preços Individuais", desc: "", icon: "💨" },
-            { name: "Transmissão", price: 75000, section: "Preços Individuais", desc: "", icon: "⚙️" },
-            { name: "Motor", price: 75000, section: "Preços Individuais", desc: "", icon: "🔥" },
-			
-			{ name: "Extras", price: 80000, section: "Avulsos", desc: "", icon: "•" },
-			{ name: "Portas", price: 15000, section: "Avulsos", desc: "", icon: "•" },
-			{ name: "Pintura", price: 15000, section: "Avulsos", desc: "Cor Farol, Rodas, ", icon: "•" },
-			{ name: "Xenon/Cor", price: 20000, section: "Avulsos", desc: "Farol e Cor", icon: "•" },
-            { name: "Som", price: 15000, section: "Avulsos", desc: "Alto-Falantes", icon: "•" },
-            { name: "Buzina", price: 10000, section: "Avulsos", desc: "", icon: "•" },
-            { name: "Capô", price: 15000, section: "Avulsos", desc: "", icon: "•" },
-            { name: "Escapamento", price: 15000, section: "Avulsos", desc: "", icon: "•" },
-            { name: "Grade", price: 15000, section: "Avulsos", desc: "", icon: "•" },
-            { name: "Neon+Cor", price: 30000, section: "Avulsos", desc: "", icon: "•" },
-            { name: "Para-Choque/Para-Lama/Saia", price: 60000, section: "Avulsos", desc: "Tudo incluso/ Avulso é 25k", icon: "•" },
-			{ name: "Aerofólio", price: 15000, section: "Avulsos", desc: "", icon: "•" },
-			{ name: "Chassi", price: 15000, section: "Avulsos", desc: "", icon: "•" },
-			{ name: "Placa", price: 2000, section: "Avulsos", desc: "", icon: "•" },
-			{ name: "Vidro", price: 15000, section: "Avulsos", desc: "", icon: "•" },
+            { name: "Suspensão", price: 120000, section: "Preços Individuais", desc: "", icon: "⬇️" },
+            { name: "Freios", price: 100000, section: "Preços Individuais", desc: "", icon: "🛑" },
+            { name: "Turbo", price: 100000, section: "Preços Individuais", desc: "", icon: "💨" },
+            { name: "Transmissão", price: 100000, section: "Preços Individuais", desc: "", icon: "⚙️" },
+            { name: "Motor", price: 150000, section: "Preços Individuais", desc: "", icon: "🔥" },
+			{ name: "Extras", price: 130000, section: "Avulsos", desc: "", icon: "•" },
+			{ name: "Portas", price: 25000, section: "Avulsos", desc: "", icon: "•" },
             
-            { name: "Roda", price: 20000, section: "Avulsos", desc: "Pneu", icon: "•" },
-            { name: "Teto", price: 15000, section: "Avulsos", desc: "", icon: "•" },
-            { name: "Adesivos/Decalque", price: 15000, section: "Avulsos", desc: "", icon: "•" },
+			{ name: "Pintura", price: 25000, section: "Avulsos", desc: "Cor Farol, Rodas, ", icon: "•" },
+			{ name: "Xenon/Cor", price: 70000, section: "Avulsos", desc: "Farol e Cor", icon: "•" },
+            { name: "Som", price: 30000, section: "Avulsos", desc: "Alto-Falantes", icon: "•" },
+            { name: "Buzina", price: 25000, section: "Avulsos", desc: "", icon: "•" },
+            { name: "Capô", price: 25000, section: "Avulsos", desc: "", icon: "•" },
+            { name: "Escapamento", price: 25000, section: "Avulsos", desc: "", icon: "•" },
+            { name: "Grade", price: 25000, section: "Avulsos", desc: "", icon: "•" },
+            { name: "Neon+Cor", price: 60000, section: "Avulsos", desc: "", icon: "•" },
+            { name: "Para-Choque/Para-Lama/Saia", price: 75000, section: "Avulsos", desc: "Tudo incluso/ Avulso é 25k", icon: "•" },
+            { name: "Película", price: 10000, section: "Avulsos", desc: "", icon: "•" },
+			{ name: "Aerofólio", price: 25000, section: "Avulsos", desc: "", icon: "•" },
+			{ name: "Chassi", price: 25000, section: "Avulsos", desc: "", icon: "•" },
+			{ name: "Placa", price: 5000, section: "Avulsos", desc: "", icon: "•" },
+			{ name: "Vidro", price: 25000, section: "Avulsos", desc: "", icon: "•" },
+            
+            { name: "Roda", price: 35000, section: "Avulsos", desc: "Pneu", icon: "•" },
+			{ name: "Pneu Custom", price: 20000, section: "Avulsos", desc: "Tipo de Pneu", icon: "•" },
+            { name: "Teto", price: 25000, section: "Avulsos", desc: "", icon: "•" },
+            { name: "Adesivos/Decalque", price: 25000, section: "Avulsos", desc: "", icon: "•" },
 			{ name: "Fumaça", price: 10000, section: "Avulsos", desc: "", icon: "•" },
-			{ name: "Banco", price: 15000, section: "Avulsos", desc: "", icon: "•" },
-			{ name: "Painel", price: 15000, section: "Avulsos", desc: "", icon: "•" },
+			{ name: "Banco", price: 25000, section: "Avulsos", desc: "", icon: "•" },
+			{ name: "Painel", price: 25000, section: "Avulsos", desc: "", icon: "•" },
+			{ name: "Ponteiros", price: 25000, section: "Avulsos", desc: "", icon: "•" },
+			{ name: "Portas", price: 25000, section: "Avulsos", desc: "", icon: "•" },
+			{ name: "Rastreador", price: 250000, section: "Avulsos", desc: "", icon: "•" },
+			{ name: "Kit Angulo", price: 250000, section: "Avulsos", desc: "", icon: "•" },
+			{ name: "DownPipe", price: 450000, section: "Avulsos", desc: "", icon: "•" },
+			{ name: "AntiLag", price: 450000, section: "Avulsos", desc: "", icon: "•" },
+			{ name: "Suspensao a AR", price: 350000, section: "Avulsos", desc: "", icon: "•" },
 
-            { name: "Blindagem 20%", price: 1000000, section: "Blindagem", desc: "Avulsos", icon: "🛡" },
-			{ name: "Blindagem 40%", price: 1200000, section: "Blindagem", desc: "Avulsos", icon: "🛡" },
-			{ name: "Blindagem 60%", price: 1400000, section: "Blindagem", desc: "Avulsos", icon: "🛡" },
-			{ name: "Blindagem 80%", price: 1600000, section: "Blindagem", desc: "Avulsos", icon: "🛡" },
-			{ name: "Blindagem 100%", price: 1800000, section: "Blindagem", desc: "Avulsos", icon: "🛡" },
-            { name: "Blindagem Pneu", price: 500000, section: "Blindagem", desc: "Avulsos", icon: "🛡" },
+            { name: "Blindagem 20%", price: 90000, section: "Blindagem", desc: "Avulsos", icon: "🛡" },
+			{ name: "Blindagem 40%", price: 120000, section: "Blindagem", desc: "Avulsos", icon: "🛡" },
+			{ name: "Blindagem 60%", price: 150000, section: "Blindagem", desc: "Avulsos", icon: "🛡" },
+			{ name: "Blindagem 80%", price: 180000, section: "Blindagem", desc: "Avulsos", icon: "🛡" },
+			{ name: "Blindagem 100%", price: 220000, section: "Blindagem", desc: "Avulsos", icon: "🛡" },
+            { name: "Blindagem Pneu", price: 60000, section: "Blindagem", desc: "Avulsos", icon: "🛡" },
 
         ];
 
@@ -628,11 +637,12 @@
 
             const totalPartner20 = Math.round(totalNormal * (1 - DISCOUNT_20));
             const totalPartner30 = Math.round(totalNormal * (1 - DISCOUNT_30));
-            
+            const savings = totalNormal - totalPartner30;
+
             document.getElementById('totalNormal').textContent = formatMoney(totalNormal);
             document.getElementById('totalPartner20').textContent = formatMoney(totalPartner20);
             document.getElementById('totalPartner30').textContent = formatMoney(totalPartner30);
-            // Economia removida
+            document.getElementById('totalSavings').textContent = formatMoney(savings);
             document.getElementById('selectedCount').textContent = count + (count === 1 ? ' item selecionado' : ' itens selecionados');
         }
 
