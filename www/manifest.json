@@ -1,0 +1,26 @@
+{
+  "name": "Tropical Mecânica",
+  "short_name": "Tropical Mecânica",
+  "description": "Tabela de preços da Tropical Mecânica - GTA RP",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0d1b2a",
+  "theme_color": "#00b4d8",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "50x50",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "112x112",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "scope": "/",
+  "lang": "pt-BR"
+}
